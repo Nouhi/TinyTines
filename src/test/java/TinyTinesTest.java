@@ -42,7 +42,7 @@ public class TinyTinesTest {
 
     data.put("location",response);
 
-    assertEquals("https://api.sunrise-sunset.org/json?lat=53.3165322&lng=-6.3425318",TinyTines.getValue(matches,data,unpopulatedString));
+    assertEquals(TinyTines.getValue(matches,data,unpopulatedString), "https://api.sunrise-sunset.org/json?lat=53.3165322&lng=-6.3425318");
   }
 
   @Test
@@ -67,7 +67,7 @@ public class TinyTinesTest {
 
     data.put("location",response);
 
-    assertEquals("https://api.sunrise-sunset.org/json?lat=53.3165322&lng=",TinyTines.getValue(matches,data,unpopulatedString));
+    assertEquals(TinyTines.getValue(matches,data,unpopulatedString) ,"https://api.sunrise-sunset.org/json?lat=53.3165322&lng=");
   }
 
   @Test
@@ -92,7 +92,7 @@ public class TinyTinesTest {
 
     data.put("location",response);
 
-    assertEquals("https://api.sunrise-sunset.org/json?lat=53.3165322&lng=",TinyTines.getValue(matches,data,unpopulatedString));
+    assertEquals(TinyTines.getValue(matches,data,unpopulatedString) ,"https://api.sunrise-sunset.org/json?lat=53.3165322&lng=");
   }
 
   @Test
@@ -120,8 +120,8 @@ public class TinyTinesTest {
     String unpopulatedString= "Hello {{extra.unmatched.brackets}} }}" ;
     List<String> dataFields= TinyTines.extractDataFields(unpopulatedString);
 
-    assertEquals("extra.unmatched.brackets",dataFields.get(0));
-    assertEquals(1,dataFields.size());
+    assertEquals(dataFields.get(0) ,"extra.unmatched.brackets");
+    assertEquals(dataFields.size() ,1);
   }
 
   @Test
@@ -175,7 +175,7 @@ public class TinyTinesTest {
 
 
     TinyTines.JsonToList(jsonAgents, mapper);
-    assertEquals(2, TinyTines.JsonToList(jsonAgents, mapper).size());
+    assertEquals(TinyTines.JsonToList(jsonAgents, mapper).size() , 2);
     assertThat(TinyTines.JsonToList(jsonAgents, mapper), hasItems(agent1, agent2));
 
 

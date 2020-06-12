@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jersey.api.client.ClientResponse;
 import com.tines.model.Agent;
 import com.tines.model.HTTPRequestAgent;
 
@@ -25,11 +26,11 @@ public class TinyTines {
     Map<String, Map<String, JSONObject>> responseMap = new HashMap<>();
     List<Agent> agentsList=new ArrayList<>();
     JSONObject result;
-    String endpoint;
-    List<String> dataFields;
+    String endpoint ,agents ;
     String path = "";
+    List<String> dataFields;
     File file;
-    String agents="";
+    Map<String, JSONObject> apiResponse;
 
     if (args.length > 0) {
       file = new File(args[0]);
@@ -58,8 +59,18 @@ public class TinyTines {
         endpoint = agent.getOptions().get("url");
         dataFields = extractDataFields(endpoint);
         endpoint = getValue(dataFields, responseMap, endpoint);
+        ClientResponse clientResponse;
+        HTTPRequestAgent httpRequestAgent;
+
         try {
-          responseMap.replace(agent.getName(), new HTTPRequestAgent(agent).executeTask(endpoint, mapper));
+          httpRequestAgent=new HTTPRequestAgent(agent);
+          clientResponse=  httpRequestAgent.executeTask(endpoint, mapper);
+          String output = clientResponse.getEntity(String.class);
+          if (httpRequestAgent.getName().compareTo("fact") == 0) {
+            output = "{\"" + "text" + "\":" + "\"" + output + "\"}";
+          }
+          apiResponse = mapper.readValue(output, HashMap.class);
+          responseMap.replace(agent.getName(), apiResponse);
         } catch (MalformedURLException | URISyntaxException | JsonProcessingException ex) {
           System.out.println(ex.getMessage());
         }

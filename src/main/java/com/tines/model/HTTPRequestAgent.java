@@ -39,7 +39,7 @@ public class HTTPRequestAgent implements BaseAgent {
   }
 
 
-  public Map<String, JSONObject> executeTask(String url, ObjectMapper mapper) throws MalformedURLException, URISyntaxException, JsonProcessingException {
+  public ClientResponse executeTask(String url, ObjectMapper mapper) throws MalformedURLException, URISyntaxException {
 
     Map<String, JSONObject> apiResponse;
 
@@ -53,13 +53,8 @@ public class HTTPRequestAgent implements BaseAgent {
     if (clientResponse.getStatus() != 200 && clientResponse.getStatus() != 201) {
       throw new RuntimeException("Failed : HTTP error code : " + clientResponse.getStatus());
     }
-    String output = clientResponse.getEntity(String.class)  ;
 
-    if (this.getName().compareTo("fact") == 0) {
-      output = "{\"" + "text" + "\":" + "\"" + output + "\"}";
-    }
-    apiResponse = mapper.readValue(output, HashMap.class);
-    return apiResponse;
+    return clientResponse;
+
   }
-
 }
